@@ -66,7 +66,8 @@ class RegistrationForm(forms.Form):
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(_("The two password fields didn't match."))
         if UserModel().USERNAME_FIELD == "email":
-            self.cleaned_data['username'] = self.cleaned_data['email']
+            if 'email' in self.cleaned_data: # its can be not set, coz of clean_email validation not pass
+                self.cleaned_data['username'] = self.cleaned_data['email']
         return self.cleaned_data
 
     def __init__(self, *args, **kwargs):
